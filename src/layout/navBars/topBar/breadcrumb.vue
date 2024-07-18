@@ -9,7 +9,7 @@
 		<el-breadcrumb class="layout-navbars-breadcrumb-hide">
 			<transition-group name="breadcrumb">
 				<el-breadcrumb-item v-for="(v, k) in state.breadcrumbList" :key="!v.meta.tagsViewName ? v.meta.title : v.meta.tagsViewName">
-					<span v-if="k === state.breadcrumbList.length - 1" class="layout-navbars-breadcrumb-span">
+					<span v-if="k === state.breadcrumbList.length" class="layout-navbars-breadcrumb-span">
 						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />
 						<div v-if="!v.meta.tagsViewName">{{ v.meta.titleEn ? $t(v.meta.titleEn) : $t(v.meta.title) }}</div>
 						<div v-else>{{ v.meta.tagsViewName }}</div>

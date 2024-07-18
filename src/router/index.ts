@@ -113,8 +113,15 @@ router.beforeEach(async (to, from, next) => {
 			Local.clear()
 			NProgress.done();
 		} else if (token &&( to.path === '/login'||to.path === '/')) {
-			next('/projectConfiguration/projectManage');	
+		let router=Local.get('datas')
+		if(router){
+			next(router[0].children?router[0].children[0].path:router[0].path);	
 			NProgress.done();
+		}else{
+			await initFrontEndControlRoutes();
+					next({ path: to.path, query: to.query });
+		}
+			
 		} 
 		else {
 			const storesRoutesList = useRoutesList(pinia);

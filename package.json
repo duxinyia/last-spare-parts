@@ -1,5 +1,5 @@
 {
-  "name": "test-software-manage",
+  "name": "spare-parts-manage",
   "version": "1.0.0",
   "description": "vue3 vite tool manage",
   "author": {
@@ -89,7 +89,7 @@
     "vuejs",
     "element-ui",
     "element-plus",
-    "test-software-manage"
+    "spare-parts-manage"
   ],
   "repository": {
     "type": "git",

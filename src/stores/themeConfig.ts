@@ -15,7 +15,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 全局主题
 			 */
 			// 默认 primary 主题颜色
-			primary: '#0047c5',
+			primary: '#f2a01b',
 			// 是否开启深色模式
 			isIsDark: false,
 
@@ -23,7 +23,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 顶栏设置
 			 */
 			// 默认顶栏导航背景颜色
-			topBar: '#0047c5',
+			topBar: '#e0992d',
 			// 默认顶栏导航字体颜色
 			topBarColor: '#ffffff',
 			// 是否开启顶栏背景颜色渐变
@@ -33,11 +33,11 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 菜单设置
 			 */
 			// 默认菜单导航背景颜色
-			menuBar: '#0047c5',
+			menuBar: '#f3a01d',
 			// 默认菜单导航字体颜色
 			menuBarColor: '#eaeaea',
 			// 默认菜单高亮背景色
-			menuBarActiveColor: '#6077ef',
+			menuBarActiveColor: '#e89a25',
 			// 是否开启菜单背景颜色渐变
 			isMenuBarColorGradual: false,
 
@@ -45,7 +45,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 分栏设置
 			 */
 			// 默认分栏菜单背景颜色
-			columnsMenuBar: '#0047c5',
+			columnsMenuBar: '#f3a01d',
 			// 默认分栏菜单字体颜色
 			columnsMenuBarColor: '#e6e6e6',
 			// 是否开启分栏菜单背景颜色渐变
@@ -101,7 +101,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 是否开启水印
 			isWartermark: false,
 			// 水印文案
-			wartermarkText: '程式發佈系统',
+			wartermarkText: '備品管理系統',
 
 			/**
 			 * 其它设置

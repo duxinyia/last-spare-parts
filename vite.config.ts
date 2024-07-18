@@ -38,7 +38,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
         `
       })
 		],
-      
 		root: process.cwd(),
 		resolve: { alias },
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,
@@ -48,14 +47,14 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			port: env.VITE_PORT as unknown as number,
 			open: JSON.parse(env.VITE_OPEN),
 			hmr: true,
-			proxy: {
-				// '/gitee': {
-				// 	target: 'https://gitee.com',
-				// 	ws: true,
-				// 	changeOrigin: true,
-				// 	rewrite: (path) => path.replace(/^\/gitee/, ''),
-				// },
-			},
+			// proxy: {
+			// 	'/dev': {
+			// 		target: 'http://10.157.189.250:8010',
+			// 		ws: true,
+			// 		changeOrigin: true,
+			// 		rewrite: (path) => path.replace(/^\/dev/, ' '),
+			// 	},
+			// },
 		},
 		build: {
 			outDir: 'dist',

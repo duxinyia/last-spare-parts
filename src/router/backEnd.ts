@@ -34,7 +34,7 @@ export async function initBackEndControlRoutes() {
 	// 界面 loading 动画开始执行
 	if (window.nextLoading === undefined) NextLoading.start();
 	// 无 token 停止执行下一步
-	if (!Session.get('token')) return false;
+	// if (!Session.get('token')) return false;
 	// 触发初始化用户信息 pinia
 	await useUserInfo().setUserInfos();
 	// 获取路由菜单数据
@@ -101,14 +101,34 @@ export async function setAddRoute() {
 		router.addRoute(route);
 	});
 }
-
+/**
+ * 请求后端路由菜单接口
+ * @description isRequestRoutes 为 true，则开启后端控制路由
+ * @returns 返回后端路由菜单数据
+ */
+import Cookies from 'js-cookie';
+import { useLoginApi } from '../api/login';
+export async function getBackEndControlRoutes() {
+	// 模拟 admin 与 test
+	const stores = useUserInfo(pinia);
+	const { userInfos } = storeToRefs(stores);
+	const auth = userInfos.value.roles[0];
+// 	const userName = Cookies.get('userName');
+					
+// const userPassword=Cookies.get('userPassword')
+// return await useLoginApi(userName, userPassword);
+	// // 管理员 admin
+	// if (auth === 'admin') return menuApi.getAdminMenu();
+	// // 其它用户 test
+	// else return menuApi.getTestMenu();
+}
 /**
  * 重新请求后端路由菜单接口
  * @description 用于菜单管理界面刷新菜单（未进行测试）
  * @description 路径：/src/views/system/menu/component/addMenu.vue
  */
 export async function setBackEndControlRefreshRoutes() {
-	// await getBackEndControlRoutes();
+	await getBackEndControlRoutes();
 }
 
 /**
@@ -137,15 +157,17 @@ export function dynamicImport(dynamicViewsModules: Record<string, Function>, com
 		const k = key.replace(/..\/views|../, '');
 		return k.startsWith(`${component}`) || k.startsWith(`/${component}`);
 	});
-	if (matchKeys?.length === 1) {
+	if (matchKeys?.length > 1) {
+		const matchKey = matchKeys[1];
+		return dynamicViewsModules[matchKey];
+	}
+	if (matchKeys?.length>= 1) {
 		// 拿到菜单路径
 		let matchKeysIndex = (matchKeys || []).findIndex((item) => item.includes('index'));
 		const matchKey = matchKeys[matchKeysIndex];
 		return dynamicViewsModules[matchKey];
 	}
-	if (matchKeys?.length > 1) {
+	if (matchKeys?.length < 1) {
 		return false;
-	}else if(matchKeys?.length < 1){
-		return 'nofound'
 	}
 }

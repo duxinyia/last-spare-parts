@@ -172,18 +172,22 @@
 						</el-popover>
 
 						<!-- 输入框 :disabled="route.path == '/basics/warehouseManage' ? (data[scope.$index].disabled === false ? false : true) : false"-->
-						<el-input
-							:disabled="data[scope.$index][`${item.key}disabled`]"
-							:maxlength="item.maxlength"
-							v-if="item.type === 'input'"
-							style="height: 30px"
-							v-model="data[scope.$index][item.key]"
-							placeholder="請輸入"
-							clearable
-							@change="changedata(scope.$index, item.key)"
-							@input="inputdata"
-							@blur="inputBlur(scope.$index)"
-						></el-input>
+						<div style="text-align: center; overflow: hidden; text-overflow: ellipsis" v-if="item.type === 'input'">
+							<span style="white-space: nowrap" v-if="scope.row.notEdit">{{ scope.row[item.key] }}</span>
+							<el-input
+								v-else
+								:disabled="data[scope.$index][`${item.key}disabled`]"
+								:maxlength="item.maxlength"
+								style="height: 30px"
+								v-model="data[scope.$index][item.key]"
+								placeholder="請輸入"
+								clearable
+								@change="changedata(scope.$index, item.key)"
+								@input="inputdata"
+								@blur="inputBlur(scope.$index)"
+							></el-input>
+						</div>
+
 						<!-- 数字输入框 -->
 						<el-input-number
 							style="text-align: center; width: 100%; display: flex; justify-content: center"
@@ -328,7 +332,7 @@
 					<slot name="btn" :row="scope.row"></slot>
 					<template v-for="btn in btnConfig" :key="btn.type">
 						<el-button
-							style="color: #fff"
+							plain
 							:disabled="scope.row[btn.type + 'Disabled']"
 							v-if="!btn.isSure && !scope.row[btn.type + 'IsShow']"
 							@click="btn.type === 'edit' ? onOpenEdit(btn.type, scope.row, scope) : onOpenOther(scope, btn.type)"
@@ -342,6 +346,7 @@
 						>
 						<el-button
 							v-if="btn.type === 'del' && !scope.row[btn.type + 'IsShow']"
+							plain
 							:disabled="scope.row.delDisabled"
 							class="button"
 							@click="onDelRow(scope.row, scope.$index)"
@@ -799,7 +804,8 @@ defineExpose({
 	}
 	:deep(.el-table th.el-table__cell) {
 		background-color: var(--el-color-primary-light-9);
-		color: var(--el-text-color-primary);
+		color: #dca143;
+		// color: var(--el-text-color-primary);
 	}
 }
 :deep(.disabled-row) {

@@ -8,12 +8,12 @@ import request from '/@/utils/request';
  * @method signOut 用户退出登录
  */
 
-export function useLoginApi(userName:String,password:String) {
+export function useLoginApi(userId:String,password:String) {
 			return request({
 				url: '/api/User/Login',
 				method: 'post',
 				data:{
-					userName,password
+					userId,password
 				}
 			});
 }

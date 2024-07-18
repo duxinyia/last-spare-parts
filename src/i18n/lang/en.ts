@@ -2,7 +2,7 @@
 export default {
 	router: {
 		home: 'home page',
-		mainHead: 'Rayprus test software system',
+		mainHead: 'spare parts manage system',
 		basicData:'basic data',
 		position:'position',
 		machineType:'machine type',

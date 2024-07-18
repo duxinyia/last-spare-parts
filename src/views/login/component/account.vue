@@ -1,14 +1,23 @@
 <template>
-	<div class="title">用戶登錄</div>
 	<el-form ref="ruleFormRef" size="large" class="login-content-form" :model="state.ruleForm">
-		<el-form-item class="login-animation1" prop="userName" :rules="[{ required: true, message: $t('message.account.worknoEmpty') }]">
+		<el-form-item
+			class="login-animation1"
+			prop="userName"
+			:rules="[{ required: true, message: $t('message.account.worknoEmpty') }]"
+			style="padding: 20px 0"
+		>
 			<el-input text :placeholder="$t('message.account.accountPlaceholder1')" v-model="state.ruleForm.userName" clearable autocomplete="off">
 				<template #prefix>
-					<el-icon class="el-input__icon" color="#9EACF2" :size="20"><ele-Avatar /></el-icon>
+					<el-icon class="el-input__icon" color="#FF7D52" :size="20"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2" prop="password" :rules="[{ required: true, message: $t('message.account.passwordEmpty') }]">
+		<el-form-item
+			style="padding: 15px 0"
+			class="login-animation2"
+			prop="password"
+			:rules="[{ required: true, message: $t('message.account.passwordEmpty') }]"
+		>
 			<el-input
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('message.account.accountPlaceholder2')"
@@ -16,8 +25,7 @@
 				autocomplete="off"
 			>
 				<template #prefix>
-					<SvgIcon class="svgIcon" :size="13" color="#9EACF2" :name="'icon-Unlock'" />
-					<!-- <el-icon class="el-input__icon" :size="20"><ele-Unlock /></el-icon> -->
+					<el-icon class="el-input__icon" color="#FF7D52" :size="20"><ele-Unlock /></el-icon>
 				</template>
 				<template #suffix>
 					<el-icon @click="state.isShowPassword = !state.isShowPassword" class="login-content-password">
@@ -44,6 +52,7 @@
 			<el-button
 				type="primary"
 				class="login-content-submit"
+				round
 				v-waves
 				@keyup.enter.native="enterdown"
 				@click="onSignIn(ruleFormRef)"
@@ -71,7 +80,6 @@ import { NextLoading } from '/@/utils/loading';
 import { useLoginApi, useLogin } from '/@/api/login/index';
 import { encryptData, decryptData } from '/@/utils/aes';
 import JSEncrypt from 'jsencrypt'; //引入模块
-import { log } from 'util';
 // 定义变量内容
 const { t } = useI18n();
 const storesThemeConfig = useThemeConfig();
@@ -101,52 +109,27 @@ const forgetPwd = () => {
 	window.open('http://10.151.128.172:8089/Login/Repassword');
 };
 // 登录
-const onSignIn = (formEl: EmptyObjectType | undefined) => {
+const onSignIn = async (formEl: EmptyObjectType | undefined) => {
 	if (!formEl) return;
+	state.loading.signIn = true;
 	const { ruleForm } = state;
 	formEl.validate(async (valid: boolean) => {
 		if (valid) {
 			try {
-				state.loading.signIn = true;
-				let paw = ruleForm.password.trim();
-				// 加密密码
-				// let datapw = encryptData(paw);
-				let datapw = paw;
-				const res = await useLoginApi(ruleForm.userName.trim(), datapw);
-				// 存储 token 到浏览器缓存
-				if (res.status) {
-					Session.set('token', res.data.token);
-					Session.set('isSign', res.data.isSign);
-					Cookies.set('userPassword', datapw);
-					Cookies.set('userName', res.data.userName);
-					Cookies.set('userId', res.data.userId);
-					// Local.set('datas', res.data.datas);
-					// let home: string[] = [];
-					// res.data.datas.unshift({
-					// 	alwaysShow: 'true',
-					// 	path: '/home',
-					// 	name: 'home',
-					// 	component: 'home',
-					// 	redirect: 'noRedirect',
-					// 	meta: { title: '專案配置', titleEn: '專案配置', isAffix: true, icon: 'home' },
-					// });
-
-					// 添加是否缓存组件状态
-					const menudatas = addIsKeepAlive(res.data.datas);
-					Local.set('datas', menudatas);
-					// router.push('/home');
-					if (!themeConfig.value.isRequestRoutes) {
-						// 前端控制路由，2、请注意执行顺序
-						const isNoPower = await initFrontEndControlRoutes();
-					} else {
-						// 后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-						// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"（目前走的这个）
-						const isNoPower = await initBackEndControlRoutes();
-						// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-						signInSuccess(isNoPower);
-					}
+				// 对接接口时，记得删除多余代码及对应依赖的引入。 `/src/stores/userInfo.ts` 中不同用户登录判断
+				Cookies.set('userName', ruleForm.userName.trim());
+				Cookies.set('userId', ruleForm.userName.trim());
+				Cookies.set('userPassword', ruleForm.password.trim());
+				if (!themeConfig.value.isRequestRoutes) {
+					// 前端控制路由，2、请注意执行顺序
+					const isNoPower = await initFrontEndControlRoutes();
+					signInSuccess(isNoPower);
 				} else {
-					state.loading.signIn = false;
+					// 后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+					// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+					const isNoPower = await initBackEndControlRoutes();
+					// 执行完 initBackEndControlRoutes，再执行 signInSuccess
+					signInSuccess(isNoPower);
 				}
 			} catch (err: any) {
 				state.loading.signIn = false;
@@ -156,23 +139,7 @@ const onSignIn = (formEl: EmptyObjectType | undefined) => {
 		}
 	});
 };
-// 在路由里面所有的meta里面加上isKeepAlive字段(是否缓存组件状态)
-const addIsKeepAlive = (datas: EmptyArrayType) => {
-	datas.forEach((item) => {
-		item.meta['isKeepAlive'] = true;
-		item.children &&
-			item.children.forEach((c: any) => {
-				let reg = new RegExp('/', 'g');
-				c.name = c.name.replace(reg, '');
-			});
-		// 菜单是否隐藏
-		item.meta['isHide'] = Boolean(item.hidden);
-		if (item.children) {
-			addIsKeepAlive(item.children);
-		}
-	});
-	return datas;
-};
+
 // 登录成功后的跳转
 const signInSuccess = (isNoPower: boolean | undefined) => {
 	if (isNoPower) {
@@ -189,7 +156,8 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 				query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
 			});
 		} else {
-			// router.push('/basics/purchase');
+			let router = Local.get('datas');
+			router.push(router[0].children ? router[0].children[0].path : router[0].path);
 		}
 		// 登录成功提示
 		const signInText = t('message.signInText');
@@ -218,16 +186,6 @@ onUnmounted(() => {
 :deep(.is-loading) {
 	font-size: 24px !important;
 }
-.title {
-	color: #0047c5;
-	font-size: 30px;
-	font-family: Microsoft YaHei;
-	margin: 73px 0px 39px 0px;
-	text-align: center;
-}
-.login-animation1 {
-	margin-bottom: 28px;
-}
 .login-content-form {
 	margin-top: 20px;
 	@for $i from 1 through 4 {
@@ -255,14 +213,15 @@ onUnmounted(() => {
 		letter-spacing: 5px;
 	}
 	.login-content-submit {
-		width: 100%;
+		width: 75%;
 		letter-spacing: 23px;
 		font-weight: 600;
 		margin-top: 15px;
-		height: 50px;
-		background: #6077ef;
-		// background: linear-gradient(170deg, #2d6dcd, #33a1ff, #33cbff);
+		height: 60px;
+		margin-top: 43px;
+		background-color: #ff7d52;
 		box-shadow: 0px 3px 7px 0px rgba(16, 92, 138, 0.35);
+		border-radius: 34px;
 		border: 0px;
 		span {
 			width: 100%;
@@ -271,14 +230,15 @@ onUnmounted(() => {
 		}
 	}
 	.pwd-container {
+		margin-top: -14px;
 		width: 100%;
-		padding: 10px 20px 0px;
+		padding: 0 20px;
 		.forpwd {
 			float: right;
 			cursor: pointer;
 			font-size: 14px;
 			&:hover {
-				color: #324bca;
+				color: #ff7d52;
 			}
 		}
 	}
@@ -289,16 +249,19 @@ onUnmounted(() => {
 		// border-top: 0px;
 		// border-right: 0px;
 		// border-left: 0px;
-		border: 1px solid #95a4ef;
-		border-radius: 5px;
-		box-shadow: 0 0 0 0px;
-		// height: 93px;
+		// border-bottom: 1px solid #ccc;
+		// border-radius: 0px;
+		// box-shadow: 0 0 0 0px;
+		height: 50px;
 	}
 	:deep(.el-input__inner) {
 		margin-left: 20px;
 	}
 	:deep(.el-form-item__error) {
 		left: 16px !important;
+	}
+	:deep(.el-form-item__content) {
+		justify-content: center;
 	}
 }
 </style>

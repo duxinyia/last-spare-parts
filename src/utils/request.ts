@@ -65,7 +65,7 @@ service.interceptors.response.use(
 		
 					// const res =response.request.responseType==='blob'?response: response.data;
 					const res = response.data;
-					if (res.code && res.code !== 0) {
+					if (res.code && res.code !== 0) {			
 						// `token` 过期或者账号已在别处登录
 						if (res.code === 401 || res.code === 4001) {
 							 ElMessageBox.alert('登錄過期,您已被登出,請重新登錄', '提示', {})
@@ -75,7 +75,7 @@ service.interceptors.response.use(
 							Local.clear();
 							// 使用 reload 时，不需要调用 resetRoute() 重置路由
 							window.location.reload();
-						}else if(res.code===500||res.Code===500){
+						}else if(res.code===500||res.Code===500){					
 							ElMessage.error(res.message||res.Message);
 						}
 						return res;
@@ -91,7 +91,7 @@ service.interceptors.response.use(
 		} else if (error.message == 'Network Error') {
 			ElMessage.error('網絡連接錯誤');
 		} 
-		else if(error.response.data.code===401){
+		else if(error.response.data.code===401||error.response.status==401){
 			await ElMessageBox.alert('登錄過期,您已被登出,請重新登錄', '提示', {})
 				.then(() => {})
 				.catch(() => {});

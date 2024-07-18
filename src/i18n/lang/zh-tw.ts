@@ -2,7 +2,7 @@
 export default {
 	router: {
 		home: '首頁',
-		mainHead: 'Rayprus程式發佈系统',
+		mainHead: '備品管理系統',
 		basicData:'基礎資料',
 		position:'站位',
 		machineType:'機臺型號',

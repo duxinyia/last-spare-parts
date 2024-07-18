@@ -71,7 +71,7 @@ declare type TableDemoState = {
 		search: TableSearchType[];
 		topBtnConfig?: TableButtonType[];
 		btnConfig?: TableButtonType[];
-		page: EmptyObjectType;
+		page: TableDemoPageType;
 		printName?: string;
 		form: EmptyObjectType;
 		dialogConfig?: DialogConfigType[];
@@ -127,3 +127,13 @@ declare type parentIdListType={
 	value:string;
 }
 declare const window: window & {  webConfig: EmptyObjectType };
+
+declare type MachineQueryGet={
+	page:TableDemoPageType;
+	matno?: number;
+	name?: boolean;
+	modelNo?: string;
+	vendor?:string;
+	hasSerialNo?:boolean
+}
+
